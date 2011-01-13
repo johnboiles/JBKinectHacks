@@ -1,0 +1,35 @@
+JBKinectHacks
+=============
+By John Boiles
+github.com/johnboiles/kinecthacks
+
+A collection of sample projects and code snippets using OpenNI and the Kinect.
+Only tested on OSX.
+
+Each sample project should work on its own, assuming you have libOpenNI.dylib
+installed in /usr/lib and the OpenNI includes in /usr/include/ni. To start a
+new sample project, just copy one of the directories and start hacking!
+
+To Install OpenNI for Mac
+-------------------------
+# Get OpenNI
+git clone git://github.com/OpenNI/OpenNI.git
+
+# Switch to unstable branch (only unstable supports osx atm)
+git checkout unstable
+
+# Follow the installation instructions in the Readme (they're pretty good)
+
+# Get the unstable forked version of the PrimeSense/Sensor module working
+git clone git://github.com/ros-pkg-git/Sensor.git
+
+# Follow the installation instructions in the Readme (they're also pretty good)
+
+# Get the PrimeSense NITE binaries here:
+http://www.openni.org/component/search/?searchword=nite&ordering=&searchphrase=all
+
+# Run the install script included with the NITE binaries
+sudo ./install.sh
+
+# Use License code
+0KOIk2JeIBYClPWVnMoRKn5cdY4=
