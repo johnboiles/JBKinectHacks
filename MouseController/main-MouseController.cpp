@@ -1,33 +1,37 @@
 /*****************************************************************************
-*																			 *
-*  OpenNI 1.0 Alpha															 *
-*  Copyright (C) 2010 PrimeSense Ltd.										 *
-*																			 *
-*  This file is part of OpenNI.												 *
-*																			 *
-*  OpenNI is free software: you can redistribute it and/or modify			 *
-*  it under the terms of the GNU Lesser General Public License as published	 *
-*  by the Free Software Foundation, either version 3 of the License, or		 *
-*  (at your option) any later version.										 *
-*																			 *
-*  OpenNI is distributed in the hope that it will be useful,				 *
-*  but WITHOUT ANY WARRANTY; without even the implied warranty of			 *
-*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the				 *
-*  GNU Lesser General Public License for more details.						 *
-*																			 *
-*  You should have received a copy of the GNU Lesser General Public License	 *
-*  along with OpenNI. If not, see <http://www.gnu.org/licenses/>.			 *
-*																			 *
+*                                                                            *
+*  OpenNI 1.0 Alpha                                                          *
+*  Copyright (C) 2010 PrimeSense Ltd.                                        *
+*                                                                            *
+*  This file is part of OpenNI.                                              *
+*                                                                            *
+*  OpenNI is free software: you can redistribute it and/or modify            *
+*  it under the terms of the GNU Lesser General Public License as published  *
+*  by the Free Software Foundation, either version 3 of the License, or      *
+*  (at your option) any later version.                                       *
+*                                                                            *
+*  OpenNI is distributed in the hope that it will be useful,                 *
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of            *
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the              *
+*  GNU Lesser General Public License for more details.                       *
+*                                                                            *
+*  You should have received a copy of the GNU Lesser General Public License  *
+*  along with OpenNI. If not, see <http://www.gnu.org/licenses/>.            *
+*                                                                            *
 *****************************************************************************/
+
+
+
 
 //---------------------------------------------------------------------------
 // Includes
 //---------------------------------------------------------------------------
+#include <ApplicationServices/ApplicationServices.h>
 #include <XnOpenNI.h>
 #include <XnCodecIDs.h>
 #include <XnCppWrapper.h>
 #include "SceneDrawer.h"
-#include "SendUDP.h"
+#include "Shared.h"
 
 //---------------------------------------------------------------------------
 // Globals
@@ -124,73 +128,58 @@ void XN_CALLBACK_TYPE UserCalibration_CalibrationEnd(xn::SkeletonCapability& cap
 	}
 }
 
-unsigned char Charify(float toChar)
+
+void MoveMouse(double x, double y)
 {
-	int value = (int) toChar;
-	if (value > 255) {value = 255;}
-	if (value < 0) {value = 0;}
-	return value = (unsigned char) value;
+    CGWarpMouseCursorPosition(CGPointMake(x, y));
 }
 
-void SendCommandToLights(float light1, float light2, float light3, float light4)
-{
-	// Send the accelerometer data
-	// We do all the mathematics at this end so there is less to send
-	unsigned char message[5];
-	
-	//DMX protocol starts with 0. I'm not calling this DMX yet, but maybe working
-	//that way
-	message[0] = 0;
-	message[1] = Charify(light1 * 255);
-	message[2] = Charify(light2 * 255);
-	message[3] = Charify(light3 * 255);
-	message[4] = Charify(light4 * 255);	  
-	printf("Sending command %d %d %d %d\n", message[0], message[1], message[2], message[3]);
-	SUDP_SendMsg((char*)message,5);
+double DistanceBetweenPoints(XnPoint3D point1, XnPoint3D point2) {
+	return sqrtf(powf((point2.X - point1.X), 2) + powf((point2.Y - point1.Y), 2) + powf((point2.Z - point1.Z), 2));
 }
 
-void ControlLightsWithHands(XnUserID player) {
-	int min = -300;
-	int max = 700;
-	XnSkeletonJoint eJoint1 = XN_SKEL_LEFT_HAND;
-	XnSkeletonJoint eJoint2 = XN_SKEL_RIGHT_HAND;
-
+void MoveMouseWithHand(XnUserID player) {
 	if (!g_UserGenerator.GetSkeletonCap().IsTracking(player))
 	{
 		printf("not tracked!\n");
 		return;
 	}
 
-	XnSkeletonJointPosition joint1, joint2;
+	XnSkeletonJointPosition rightHandPosition;
 	// Looks like this is how you get the skeleton position for the player
-	g_UserGenerator.GetSkeletonCap().GetSkeletonJointPosition(player, eJoint1, joint1);
-	g_UserGenerator.GetSkeletonCap().GetSkeletonJointPosition(player, eJoint2, joint2);
+	g_UserGenerator.GetSkeletonCap().GetSkeletonJointPosition(player, XN_SKEL_RIGHT_HAND, rightHandPosition);
 
-	if (joint1.fConfidence < 0.5 || joint2.fConfidence < 0.5)
+	if (rightHandPosition.fConfidence < 0.5)
 	{
 		return;
 	}
 
-	XnPoint3D pt[2];
-	pt[0] = joint1.position;
-	pt[1] = joint2.position;
+	XnPoint3D rightHandPoint = rightHandPosition.position;
 
-	float output0 = (pt[0].Y - min) / (max - min);
-	float output1 = (pt[1].Y - min) / (max - min);
-   // printf("Circuit 1: %0.1f Circuit2 : %0.1f\n", output0, output1);
-	SendCommandToLights(output0, output1, 0, 0);
-}
+	CGRect displayBounds = CGDisplayBounds(CGMainDisplayID());
+	//printf("display bounds are %f %f %f %f", displayBounds.origin.x, displayBounds.origin.y, displayBounds.size.width, displayBounds.size.height);
 
-XnUserID FirstTrackingUser() {
-	XnUserID aUsers[10];
-	XnUInt16 nUsers = 10;
-	g_UserGenerator.GetUsers(aUsers, nUsers);
-	// The first user that's tracking will be in control
-	for (int i = 0; i < nUsers; ++i) {
-		if(g_UserGenerator.GetSkeletonCap().IsTracking(aUsers[i])){
-			return aUsers[i];
-		}
-	}
+	// Map some rect relative to the player's body to the mouse cursor
+	// Rectange will be as tall as head to pelvis and as wide the length of the arm
+	XnSkeletonJointPosition headPosition;
+	XnSkeletonJointPosition rightHipPosition;
+	XnSkeletonJointPosition rightShoulderPosition;
+	XnSkeletonJointPosition rightElbowPosition;
+	
+	g_UserGenerator.GetSkeletonCap().GetSkeletonJointPosition(player, XN_SKEL_HEAD, headPosition);
+	g_UserGenerator.GetSkeletonCap().GetSkeletonJointPosition(player, XN_SKEL_RIGHT_HIP, rightHipPosition);
+	g_UserGenerator.GetSkeletonCap().GetSkeletonJointPosition(player, XN_SKEL_RIGHT_SHOULDER, rightShoulderPosition);
+	g_UserGenerator.GetSkeletonCap().GetSkeletonJointPosition(player, XN_SKEL_RIGHT_ELBOW, rightElbowPosition);
+	double boxWidth = DistanceBetweenPoints(rightShoulderPosition.position, rightElbowPosition.position) + DistanceBetweenPoints(rightElbowPosition.position, rightHandPosition.position);
+	double boxHeight = headPosition.position.Y - rightHipPosition.position.Y;
+	double boxOriginX = rightShoulderPosition.position.X;
+	double boxOriginY = rightHipPosition.position.Y;
+	//printf("box width %f box height %f hand position %f %f", boxWidth, boxHeight, rightHandPosition.position.X, rightHandPosition.position.Y);
+
+	double screenX = (1.3 * (rightHandPosition.position.X - boxOriginX) / boxWidth) * displayBounds.size.width;
+	double screenY = (1 - (rightHandPosition.position.Y - boxOriginY) / boxHeight) * displayBounds.size.height;
+	//float output1 = (pt[1].Y - min) / (max - min);
+	MoveMouse(screenX, screenY);
 }
 
 // this function is called each frame
@@ -224,8 +213,8 @@ void glutDisplay (void)
 
 	glutSwapBuffers();
 
-    XnUserID trackingUser = FirstTrackingUser();
-	ControlLightsWithHands(trackingUser);
+	XnUserID trackingUser = FirstTrackingUser(g_UserGenerator);
+	MoveMouseWithHand(trackingUser);
 }
 
 void glutIdle (void)
@@ -326,7 +315,7 @@ int main(int argc, char **argv)
 		}
 		else if (nRetVal != XN_STATUS_OK)
 		{
-			printf("Open failed: %s\n", xnGetStatusString(nRetVal));
+		    printf("Open failed: %s\n", xnGetStatusString(nRetVal));
 			return (nRetVal);
 		}
 	}
@@ -367,8 +356,6 @@ int main(int argc, char **argv)
 	CHECK_RC(nRetVal, "StartGenerating");
 
 	glInit(&argc, argv);
-	SUDP_Init("192.168.1.20");
-	SendCommandToLights(0, 0, 0, 0);
 	glutMainLoop();
 
 }

@@ -7,7 +7,7 @@ struct sockaddr_in their_addr; // connector's address information
 int sockfd;		       // file descriptor for socket connection
 
 //Initialize network connection
-int SUDP_Init(const char* ipaddress){
+int SUDP_Init(const char* ipaddress) {
    
     if ((he=gethostbyname(ipaddress)) == NULL) {  // get the host info
         herror("gethostbyname");
@@ -27,8 +27,7 @@ int SUDP_Init(const char* ipaddress){
 }
 
 //Send a UDP packet
-int SUDP_SendMsg(const char * data, int length)
-{
+int SUDP_SendMsg(const char * data, int length) {
     int numbytes;
     if ((numbytes = sendto(sockfd, data, length, 0,
              (struct sockaddr *)&their_addr, sizeof their_addr)) == -1) 
@@ -41,7 +40,7 @@ int SUDP_SendMsg(const char * data, int length)
 }
 
 //Close the socket
-int SUDP_Close(){
+int SUDP_Close() {
     close(sockfd);
     return 0;
 }

@@ -1,14 +1,25 @@
 JBKinectHacks
 =============
 By John Boiles
-github.com/johnboiles/kinecthacks
+http://github.com/johnboiles/JBKinectHacks
 
 A collection of sample projects and code snippets using OpenNI and the Kinect.
 Only tested on OSX.
 
-Each sample project should work on its own, assuming you have libOpenNI.dylib
-installed in /usr/lib and the OpenNI includes in /usr/include/ni. To start a
-new sample project, just copy one of the directories and start hacking!
+To build using the included makefiles, libOpenNI.dylib must be
+installed in /usr/lib and the OpenNI includes must be in /usr/include/ni.
+
+To build using the xcode project, you must symlink /usr/include/ni and
+/usr/lib/libOpenNI.dylib to the appropriate places in your developer install.
+AFAIK there's not an elegant way to get xcode to use the standard /usr/include
+and /usr/lib paths. For my installation I ran the following commands:
+
+sudo ln -s /usr/lib/libOpenNI.dylib /Developer/SDKs/MacOSX10.6.sdk/usr/lib/libOpenNI.dylib
+
+sudo ln -s /usr/include/ni /Developer/SDKs/MacOSX10.6.sdk/usr/include/ni
+
+Note that the binaries expect a file named SamplesConfig.xml to be in the present working
+directory when they are run.
 
 To Install OpenNI for Mac
 -------------------------
