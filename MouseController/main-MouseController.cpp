@@ -129,9 +129,59 @@ void XN_CALLBACK_TYPE UserCalibration_CalibrationEnd(xn::SkeletonCapability& cap
 }
 
 
-void MoveMouse(double x, double y)
+void MoveMouse(CGFloat x, CGFloat y)
 {
     CGWarpMouseCursorPosition(CGPointMake(x, y));
+}
+
+// Borrowed from the synergy project
+void ClickLeftMouse(CGPoint& pos)
+{
+	// check if cursor position is valid on the client display configuration
+	// stkamp@users.sourceforge.net
+	CGDisplayCount displayCount = 0;
+	CGGetDisplaysWithPoint(pos, 0, NULL, &displayCount);
+	if (displayCount == 0) {
+		// cursor position invalid - clamp to bounds of last valid display.
+		// find the last valid display using the last cursor position.
+		displayCount = 0;
+		CGDirectDisplayID displayID;
+		CGGetDisplaysWithPoint(pos, 1,
+                           &displayID, &displayCount);
+		if (displayCount != 0) {
+			CGRect displayRect = CGDisplayBounds(displayID);
+			if (pos.x < displayRect.origin.x) {
+				pos.x = displayRect.origin.x;
+			}
+			else if (pos.x > displayRect.origin.x +
+               displayRect.size.width - 1) {
+				pos.x = displayRect.origin.x + displayRect.size.width - 1;
+			}
+			if (pos.y < displayRect.origin.y) {
+				pos.y = displayRect.origin.y;
+			}
+			else if (pos.y > displayRect.origin.y +
+               displayRect.size.height - 1) {
+				pos.y = displayRect.origin.y + displayRect.size.height - 1;
+			}
+		}
+	}
+	
+  CGEventRef event = CGEventCreateMouseEvent(NULL, kCGEventLeftMouseDown, pos, 0);
+	CGEventPost(kCGHIDEventTap, event);
+  CFRelease(event);
+
+  event = CGEventCreateMouseEvent(NULL, kCGEventLeftMouseUp, pos, 0);
+	CGEventPost(kCGHIDEventTap, event);
+  CFRelease(event);
+}
+
+
+void ClickLeftMouse(double x, double y) {
+  CGEventRef event = CGEventCreateMouseEvent(NULL, kCGEventLeftMouseDown, CGPointMake(x, y), 0);
+	CGEventPost(kCGHIDEventTap, event);
+  event = CGEventCreateMouseEvent(NULL, kCGEventLeftMouseUp, CGPointMake(x, y), 0);
+	CGEventPost(kCGHIDEventTap, event);
 }
 
 double DistanceBetweenPoints(XnPoint3D point1, XnPoint3D point2) {
@@ -290,7 +340,6 @@ void glInit (int * pargc, char ** argv)
 int main(int argc, char **argv)
 {
 	XnStatus nRetVal = XN_STATUS_OK;
-
 	if (argc > 1)
 	{
 		nRetVal = g_Context.Init();

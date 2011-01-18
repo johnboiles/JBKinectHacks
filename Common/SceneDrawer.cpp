@@ -119,6 +119,21 @@ void glPrintString(void *font, char *str)
 	}
 }
 
+void Draw2DBoundingBoxWithPoints(XnPoint3D tl, XnPoint3D tr, XnPoint3D br, XnPoint3D bl) {
+  // q: Can this be run from anywhere?
+  glBegin(GL_LINES);
+  glColor4f(1, 0, 0, 1); // Red
+  g_DepthGenerator.ConvertRealWorldToProjective(2, &tl, &tl);
+  g_DepthGenerator.ConvertRealWorldToProjective(2, &tr, &tr);
+  g_DepthGenerator.ConvertRealWorldToProjective(2, &br, &br);
+  g_DepthGenerator.ConvertRealWorldToProjective(2, &bl, &bl);
+  glVertex3i(tl.X, tl.Y, 0);
+  glVertex3i(tr.X, tr.Y, 0);
+  glVertex3i(br.X, br.Y, 0);
+  glVertex3i(bl.X, bl.Y, 0);
+  glEnd();
+}
+
 void DrawLimb(XnUserID player, XnSkeletonJoint eJoint1, XnSkeletonJoint eJoint2)
 {
 	if (!g_UserGenerator.GetSkeletonCap().IsTracking(player))
