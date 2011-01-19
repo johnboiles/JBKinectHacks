@@ -20,8 +20,8 @@
 
 CC = g++
 # add -O3 for optimizations
-CFLAGS = `pkg-config lua --cflags` -fPIC -Wall -arch i386 -Iinclude
-LFLAGS = -shared -arch i386 `pkg-config --libs --cflags lua`
+CFLAGS = -fPIC -Wall -arch i386 -Iinclude
+LFLAGS = -shared -arch i386
 STEAM_USERNAME = jaboiles
 INSTALL_PATH = ~/Library/Application\ Support/Steam/SteamApps/$(STEAM_USERNAME)/garrysmod/garrysmod/lua/includes/modules
 
