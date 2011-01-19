@@ -26,9 +26,6 @@
 // Module definition
 GMOD_MODULE( Init, Shutdown );
 
-// Globals
-ILuaInterface* g_Lua;
-
 LUA_FUNCTION( PrintSomething )
 {
 	g_Lua->Msg( "Hello, there!\n" );
@@ -38,7 +35,6 @@ LUA_FUNCTION( PrintSomething )
 // Initialization
 int Init( lua_State *L )
 {
-	g_Lua = Lua();
 	g_Lua->SetGlobal( "PrintSomething", PrintSomething );
 	g_Lua->Msg( "New Module Loaded!\n" );
 	return 0;

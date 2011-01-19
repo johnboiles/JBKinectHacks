@@ -29,6 +29,7 @@ extern "C" {
 }
 #include "GMLuaModule.h"
 
+#include "gm_zmq.h"
 #include <zmq.h>
 #include <assert.h>
 #include <string.h>
@@ -46,8 +47,6 @@ extern "C" {
 #define MT_ZMQ_CONTEXT "MT_ZMQ_CONTEXT"
 #define MT_ZMQ_SOCKET  "MT_ZMQ_SOCKET"
 
-// Globals
-ILuaInterface* g_Lua;
 
 // Module definition
 GMOD_MODULE( Lzmq_init, Lzmq_close );
@@ -57,51 +56,8 @@ typedef struct {
 	int should_free;
 } zmq_ptr;
 
-int Lzmq_version(lua_State *L)
-{
-	int major, minor, patch;
-
-	zmq_version(&major, &minor, &patch);
-
-	lua_createtable(L, 3, 0);
-
-	lua_pushinteger(L, 1);
-	lua_pushinteger(L, major);
-	lua_settable(L, -3);
-
-	lua_pushinteger(L, 2);
-	lua_pushinteger(L, minor);
-	lua_settable(L, -3);
-
-	lua_pushinteger(L, 3);
-	lua_pushinteger(L, patch);
-	lua_settable(L, -3);
-
-	return 1;
-}
-
-int Lzmq_push_error(lua_State *L)
-{
-	const char *error;
-	lua_pushnil(L);
-	switch(zmq_errno()) {
-	case EAGAIN:
-		lua_pushliteral(L, "timeout");
-		break;
-	case ETERM:
-		lua_pushliteral(L, "closed");
-		break;
-	default:
-		error = zmq_strerror(zmq_errno());
-		lua_pushlstring(L, error, strlen(error));
-		break;
-	}
-	return 2;
-}
-
 int Lzmq_init(lua_State *L)
 {
-	g_Lua = Lua();
 	//g_Lua = modulemanager->GetLuaInterface(L);
 
 	// Loading the lua state here doesn't seem to help
@@ -152,6 +108,65 @@ int Lzmq_init(lua_State *L)
 	return 1;
 }
 
+int Lzmq_close(lua_State *L)
+{
+	zmq_ptr *s = (zmq_ptr *)luaL_checkudata(L, 1, MT_ZMQ_SOCKET);
+
+	if(s->ptr != NULL) {
+		if(zmq_close(s->ptr) == 0) {
+			s->ptr = NULL;
+		} else {
+			return Lzmq_push_error(L);
+		}
+	}
+
+	lua_pushboolean(L, 1);
+
+	return 1;
+}
+
+extern "C" {
+int Lzmq_version(lua_State *L)
+{
+	int major, minor, patch;
+
+	zmq_version(&major, &minor, &patch);
+
+	lua_createtable(L, 3, 0);
+
+	lua_pushinteger(L, 1);
+	lua_pushinteger(L, major);
+	lua_settable(L, -3);
+
+	lua_pushinteger(L, 2);
+	lua_pushinteger(L, minor);
+	lua_settable(L, -3);
+
+	lua_pushinteger(L, 3);
+	lua_pushinteger(L, patch);
+	lua_settable(L, -3);
+
+	return 1;
+}
+
+int Lzmq_push_error(lua_State *L)
+{
+	const char *error;
+	lua_pushnil(L);
+	switch(zmq_errno()) {
+	case EAGAIN:
+		lua_pushliteral(L, "timeout");
+		break;
+	case ETERM:
+		lua_pushliteral(L, "closed");
+		break;
+	default:
+		error = zmq_strerror(zmq_errno());
+		lua_pushlstring(L, error, strlen(error));
+		break;
+	}
+	return 2;
+}
 
 int Lzmq_term(lua_State *L)
 {
@@ -202,23 +217,6 @@ int Lzmq_socket(lua_State *L)
 
 	luaL_getmetatable(L, MT_ZMQ_SOCKET);
 	lua_setmetatable(L, -2);
-
-	return 1;
-}
-
-int Lzmq_close(lua_State *L)
-{
-	zmq_ptr *s = (zmq_ptr *)luaL_checkudata(L, 1, MT_ZMQ_SOCKET);
-
-	if(s->ptr != NULL) {
-		if(zmq_close(s->ptr) == 0) {
-			s->ptr = NULL;
-		} else {
-			return Lzmq_push_error(L);
-		}
-	}
-
-	lua_pushboolean(L, 1);
 
 	return 1;
 }
@@ -578,4 +576,5 @@ int luaopen_zmq(lua_State *L)
 	set_zmq_const(SNDMORE);
 
 	return 1;
+}
 }

@@ -20,6 +20,8 @@
 
 CC = g++
 CFLAGS = `pkg-config lua --cflags` -fPIC -O3 -Wall -arch i386 -Iinclude
+# We probably need to link against Gmod's lua_shared.dylib if we hope to have access
+# to all the c functions.
 LFLAGS = -shared -arch i386 `pkg-config --libs --cflags lua` -lzmq
 STEAM_USERNAME = jaboiles
 INSTALL_PATH = ~/Library/Application\ Support/Steam/SteamApps/$(STEAM_USERNAME)/garrysmod/garrysmod/lua/includes/modules
@@ -27,12 +29,12 @@ INSTALL_PATH = ~/Library/Application\ Support/Steam/SteamApps/$(STEAM_USERNAME)/
 all: gm_zmq_osx.dll
 
 
-zmq.lo: zmq.cpp
-	$(CC) -o zmq.lo -c $(CFLAGS) zmq.cpp
+gm_zmq.lo: gm_zmq.cpp
+	$(CC) -o gm_zmq.lo -c $(CFLAGS) gm_zmq.cpp
 
 
-gm_zmq_osx.dll: zmq.lo
-	$(CC) -o gm_zmq_osx.dll $(LFLAGS) zmq.lo
+gm_zmq_osx.dll: gm_zmq.lo
+	$(CC) -o gm_zmq_osx.dll $(LFLAGS) gm_zmq.lo
 
 
 install: gm_zmq_osx.dll
@@ -41,4 +43,4 @@ install: gm_zmq_osx.dll
 
 
 clean:
-	rm -f gm_zmq_osx.dll zmq.lo
+	rm -f gm_zmq_osx.dll gm_zmq.lo

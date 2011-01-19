@@ -6,23 +6,19 @@
 //										 
 //=============================================================================//
 
-#ifndef ILUAINTERFACE_H
-#define ILUAINTERFACE_H
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdarg.h>
-
-#ifdef _WIN32
-#pragma once
-#endif
-
 #ifndef NO_SDK
 #include "tier1/utlvector.h"
 #endif
 
-#ifdef UNICODE
+#if defined(UNICODE) && defined(_WIN32)
 #undef GetObject
+#endif
+
+#ifndef ILUAINTERFACE_H
+#define ILUAINTERFACE_H
+
+#ifdef _WIN32
+#pragma once
 #endif
 
 // Forward Definitions
@@ -337,52 +333,6 @@ class ILuaInterface : public ILuaInterface002
 		virtual void PushDouble( double iInt ) = 0;
 		
 		// ScriptEnforcer "private" methods
-};
-
-extern ILuaInterface* g_Lua;
-
-// Friendly Macros (Don't try to use these in modules, instead do Lua()->GetBool(1) etc)
-
-#define Get_Bool( i ) (g_Lua->GetBool( i ))
-#define Get_String( i ) (g_Lua->GetStringOrError( i ))
-#define Get_Int( i ) (g_Lua->GetInteger( i ))
-#define Get_Float( i ) (g_Lua->GetNumber( i ))
-#define Get_LuaObject( i ) (g_Lua->GetObject( i ))
-
-#define Is_Bool( i ) (g_Lua->GetType( i ) == GLua::TYPE_BOOL)
-#define Is_Number( i ) (g_Lua->GetType( i ) == GLua::TYPE_NUMBER)
-#define Is_String( i ) (g_Lua->GetType( i ) == GLua::TYPE_STRING)
-#define Is_Table( i ) (g_Lua->GetType( i ) == GLua::TYPE_TABLE)
-#define Is_Vector( i ) (g_Lua->GetType( i ) == GLua::TYPE_VECTOR)
-#define Is_Type( i, type ) ( g_Lua->GetType( i ) == type )
-#define Is_PhysObj( i ) ( g_Lua->GetType( i ) == GLua::TYPE_PHYSOBJ )
-
-#define PrintLuaError g_Lua->ErrorNoHalt
-
-#define Push_Float( i ) ( g_Lua->Push( (float) (i) ) )
-#define Push_Int( i ) ( g_Lua->Push( (float) (i) ) )
-#define Push_Bool( i ) ( g_Lua->Push( (bool) (i) ) )
-#define Push_String( i ) ( g_Lua->Push( (const char*) (i) ) )
-#define Push_Nil() ( g_Lua->Push( (ILuaObject*) (NULL) ) )
-#define Push_Long( i ) ( g_Lua->PushLong( (long) (i) ) )
-
-#define Return( i ) ( g_Lua->GetReturn(i) )
-
-class CLuaLock
-{
-	public:
-
-		CLuaLock() 
-		{ 
-			if (!g_Lua) return;
-			g_Lua->Lock(); 
-		}
-
-		~CLuaLock() 
-		{ 
-			if (!g_Lua) return;
-			g_Lua->UnLock(); 
-		}
 };
 
 #endif // ILUAINTERFACE_H

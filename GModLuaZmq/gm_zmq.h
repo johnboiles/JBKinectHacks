@@ -1,6 +1,6 @@
 
 //GMOD_MODULE( Lzmq_init, Lzmq_close );
-
+extern "C" {
 int Lzmq_version(lua_State *L);
 
 int Lzmq_push_error(lua_State *L);
@@ -29,3 +29,5 @@ int Lzmq_send(lua_State *L);
 int Lzmq_recv(lua_State *L);
 
 LUALIB_API int luaopen_zmq(lua_State *L);
+
+}

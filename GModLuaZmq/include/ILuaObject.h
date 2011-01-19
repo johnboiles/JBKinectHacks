@@ -6,14 +6,14 @@
 //										 
 //=============================================================================//
 
+#include "ILuaInterface.h"
+
 #ifndef ILUAOBJECT_H
 #define ILUAOBJECT_H
 
 #ifdef _WIN32
 #pragma once
 #endif
-
-#include "ILuaInterface.h"
 
 class ILuaObject;
 

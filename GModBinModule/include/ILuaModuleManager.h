@@ -8,6 +8,13 @@
 
 #include "ILuaInterface.h"
 
+#ifndef ILUAMODULEMANAGER_H
+#define ILUAMODULEMANAGER_H
+
+#ifdef _WIN32
+#pragma once
+#endif
+
 class ILuaModuleManager
 {
 	public:
@@ -18,4 +25,7 @@ class ILuaModuleManager
 
 extern ILuaModuleManager* modulemanager;
 
+#define g_Lua modulemanager->GetLuaInterface( L )
 #define Lua() modulemanager->GetLuaInterface( L )
+
+#endif // ILUAMODULEMANAGER_H
