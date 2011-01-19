@@ -13,4 +13,11 @@ Update Makefile to contain your steam username
 $ make install
 </pre>
 
+Usage
+=====
 
+In Garry's mod, start a game and from the console type
+<pre>
+lua_run require("module")
+lua_run PrintSomething()
+</pre>
