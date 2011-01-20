@@ -6,3 +6,5 @@ build
 *.pbxuser
 Bin
 *.lo
+*.o
+

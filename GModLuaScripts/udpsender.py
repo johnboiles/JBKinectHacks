@@ -15,8 +15,11 @@ s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
 x = 0;
 while True:
-    x += 0.1
-    xval = 10 * math.sin(x)
-    print "sending x = ", xval
-    s.sendto(str(xval), (HOST, PORT))
+    x += 0.05
+    xval = 300 * math.sin(x)
+    yval = 300 * math.sin(x)
+    zval = math.fabs(300 * math.sin(x))
+    output = "x%fy%fz%f" % (xval, yval, zval)
+    print "sending: %s", output
+    s.sendto(output, (HOST, PORT))
     time.sleep(.04)
