@@ -133,15 +133,15 @@ void SendUDPSkeletalData(XnUserID player) {
 		return;
 	}
 
-	XnSkeletonJointPosition leftHand, rightHand, leftElbow, rightElbow, leftCollar, rightCollar, torso, leftHip, rightHip, leftKnee, rightKnee, leftAnkle, rightAnkle, leftFoot, rightFoot, head;
+	XnSkeletonJointPosition leftHand, rightHand, leftElbow, rightElbow, leftShoulder, rightShoulder, torso, leftHip, rightHip, leftKnee, rightKnee, leftAnkle, rightAnkle, leftFoot, rightFoot, head;
 	g_UserGenerator.GetSkeletonCap().GetSkeletonJointPosition(player, XN_SKEL_LEFT_HAND, leftHand);
 	g_UserGenerator.GetSkeletonCap().GetSkeletonJointPosition(player, XN_SKEL_RIGHT_HAND, rightHand);
   
   g_UserGenerator.GetSkeletonCap().GetSkeletonJointPosition(player, XN_SKEL_LEFT_ELBOW, leftElbow);
   g_UserGenerator.GetSkeletonCap().GetSkeletonJointPosition(player, XN_SKEL_RIGHT_ELBOW, rightElbow);
   
-  g_UserGenerator.GetSkeletonCap().GetSkeletonJointPosition(player, XN_SKEL_LEFT_COLLAR, leftCollar);
-  g_UserGenerator.GetSkeletonCap().GetSkeletonJointPosition(player, XN_SKEL_RIGHT_COLLAR, rightCollar);
+  g_UserGenerator.GetSkeletonCap().GetSkeletonJointPosition(player, XN_SKEL_LEFT_SHOULDER, leftShoulder);
+  g_UserGenerator.GetSkeletonCap().GetSkeletonJointPosition(player, XN_SKEL_LEFT_SHOULDER, rightShoulder);
   
   g_UserGenerator.GetSkeletonCap().GetSkeletonJointPosition(player, XN_SKEL_TORSO, torso);
   
@@ -184,19 +184,46 @@ void SendUDPSkeletalData(XnUserID player) {
           leftKnee.position.X, leftKnee.position.Y, leftKnee.position.Z,
           rightKnee.position.X, rightKnee.position.Y, rightKnee.position.Z,
 
-          leftAnkle.position.X, leftAnkle.position.Y, leftAnkle.position.Z,
-          rightAnkle.position.X, rightAnkle.position.Y, rightAnkle.position.Z,
+          //leftAnkle.position.X, leftAnkle.position.Y, leftAnkle.position.Z,
+          //rightAnkle.position.X, rightAnkle.position.Y, rightAnkle.position.Z,
 
           leftFoot.position.X, leftFoot.position.Y, leftFoot.position.Z, 
           rightFoot.position.X, rightFoot.position.Y, rightFoot.position.Z, 
           head.position.X, head.position.Y, head.position.Z);
 */
+	sprintf(packet, "lhx%0.3fy%0.3fz%0.3f rhx%0.3fy%0.3fz%0.3f lex%0.3fy%0.3fz%0.3f rex%0.3fy%0.3fz%0.3f lsx%0.3fy%0.3fz%0.3f rsx%0.3fy%0.3fz%0.3f ttx%0.3fy%0.3fz%0.3f lix%0.3fy%0.3fz%0.3f rix%0.3fy%0.3fz%0.3f lkx%0.3fy%0.3fz%0.3f rkx%0.3fy%0.3fz%0.3f lfx%0.3fy%0.3fz%0.3f rfx%0.3fy%0.3fz%0.3f hhx%0.3fy%0.3fz%0.3f ",
+          leftHand.position.X, leftHand.position.Y, leftHand.position.Z,
+          rightHand.position.X, rightHand.position.Y, rightHand.position.Z,
+
+          leftElbow.position.X, leftElbow.position.Y, leftElbow.position.Z,
+          rightElbow.position.X, rightElbow.position.Y, rightElbow.position.Z,
+
+          leftShoulder.position.X, leftShoulder.position.Y, leftShoulder.position.Z,
+          rightShoulder.position.X, rightShoulder.position.Y, rightShoulder.position.Z,
+
+          torso.position.X, torso.position.Y, torso.position.Z,
+
+          leftHip.position.X, leftHip.position.Y, leftHip.position.Z,
+          rightHip.position.X, rightHip.position.Y, rightHip.position.Z,
+
+          leftKnee.position.X, leftKnee.position.Y, leftKnee.position.Z,
+          rightKnee.position.X, rightKnee.position.Y, rightKnee.position.Z,
+
+          //leftAnkle.position.X, leftAnkle.position.Y, leftAnkle.position.Z,
+          //rightAnkle.position.X, rightAnkle.position.Y, rightAnkle.position.Z,
+
+          leftFoot.position.X, leftFoot.position.Y, leftFoot.position.Z, 
+          rightFoot.position.X, rightFoot.position.Y, rightFoot.position.Z, 
+          head.position.X, head.position.Y, head.position.Z);
+
+/*
 	sprintf(packet, "lhx%0.3fy%0.3fz%0.3f rhx%0.3fy%0.3fz%0.3f lfx%0.3fy%0.3fz%0.3f rfx%0.3fy%0.3fz%0.3f hhx%0.3fy%0.3fz%0.3f",
           leftHand.position.X, leftHand.position.Y, leftHand.position.Z,
           rightHand.position.X, rightHand.position.Y, rightHand.position.Z,
           leftFoot.position.X, leftFoot.position.Y, leftFoot.position.Z, 
           rightFoot.position.X, rightFoot.position.Y, rightFoot.position.Z, 
           head.position.X, head.position.Y, head.position.Z);
+*/
   printf("sending data: %s\n", packet);
 	SUDP_SendMsg(packet, strlen(packet));
 }

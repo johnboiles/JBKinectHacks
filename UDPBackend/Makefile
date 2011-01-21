@@ -6,7 +6,7 @@ INC_DIRS = /usr/include/ni ../Common
 
 SRC_FILES = *.cpp *.c ../Common/*.cpp ../Common/*.c
 
-EXE_NAME = GModBackend
+EXE_NAME = UDPBackend
 
 ifeq ("$(OSTYPE)","Darwin")
 	LDFLAGS += -framework OpenGL -framework GLUT

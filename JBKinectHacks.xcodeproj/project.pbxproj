@@ -22,9 +22,9 @@
 		422092C212DFCD6A00DB7914 /* Shared.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 422092A712DFCD6900DB7914 /* Shared.cpp */; };
 		422092C312DFCD6A00DB7914 /* main-DimletController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 422092AA12DFCD6900DB7914 /* main-DimletController.cpp */; };
 		422092C912DFCD6A00DB7914 /* SendUDP.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 422092B112DFCD6A00DB7914 /* SendUDP.cpp */; };
-		42D3A4F612E815CB00094A67 /* main-GModBackend.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42D3A4ED12E815CB00094A67 /* main-GModBackend.cpp */; };
-		42D3A4F712E815CB00094A67 /* Makefile in Sources */ = {isa = PBXBuildFile; fileRef = 42D3A4EE12E815CB00094A67 /* Makefile */; };
-		42D3A4FC12E815CB00094A67 /* SendUDP.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42D3A4F412E815CB00094A67 /* SendUDP.cpp */; };
+		42B7549612E980F10023BEDC /* main-UDPBackend.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42B7548C12E980F10023BEDC /* main-UDPBackend.cpp */; };
+		42B7549712E980F10023BEDC /* Makefile in Sources */ = {isa = PBXBuildFile; fileRef = 42B7548D12E980F10023BEDC /* Makefile */; };
+		42B7549D12E980F10023BEDC /* SendUDP.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42B7549412E980F10023BEDC /* SendUDP.cpp */; };
 		8DD76F6A0486A84900D96B5E /* JBMouseControllerXcode.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = C6859E8B029090EE04C91782 /* JBMouseControllerXcode.1 */; };
 /* End PBXBuildFile section */
 
@@ -60,10 +60,10 @@
 		422092B212DFCD6A00DB7914 /* SendUDP.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SendUDP.h; sourceTree = "<group>"; };
 		422092B412DFCD6A00DB7914 /* main-MouseController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "main-MouseController.cpp"; sourceTree = "<group>"; };
 		422092B512DFCD6A00DB7914 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
-		42D3A4ED12E815CB00094A67 /* main-GModBackend.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "main-GModBackend.cpp"; sourceTree = "<group>"; };
-		42D3A4EE12E815CB00094A67 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
-		42D3A4F412E815CB00094A67 /* SendUDP.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SendUDP.cpp; sourceTree = "<group>"; };
-		42D3A4F512E815CB00094A67 /* SendUDP.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SendUDP.h; sourceTree = "<group>"; };
+		42B7548C12E980F10023BEDC /* main-UDPBackend.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "main-UDPBackend.cpp"; sourceTree = "<group>"; };
+		42B7548D12E980F10023BEDC /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
+		42B7549412E980F10023BEDC /* SendUDP.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SendUDP.cpp; sourceTree = "<group>"; };
+		42B7549512E980F10023BEDC /* SendUDP.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SendUDP.h; sourceTree = "<group>"; };
 		8DD76F6C0486A84900D96B5E /* JBMouseController */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = JBMouseController; sourceTree = BUILT_PRODUCTS_DIR; };
 		C6859E8B029090EE04C91782 /* JBMouseControllerXcode.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = JBMouseControllerXcode.1; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -138,8 +138,8 @@
 		4220929D12DFCD5700DB7914 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
-				42D3A4EC12E815CB00094A67 /* GModBackend */,
 				422092A312DFCD6900DB7914 /* Common */,
+				42B7548B12E980F10023BEDC /* UDPBackend */,
 				422092A912DFCD6900DB7914 /* DimletController */,
 				422092B312DFCD6A00DB7914 /* MouseController */,
 			);
@@ -178,15 +178,15 @@
 			path = MouseController;
 			sourceTree = "<group>";
 		};
-		42D3A4EC12E815CB00094A67 /* GModBackend */ = {
+		42B7548B12E980F10023BEDC /* UDPBackend */ = {
 			isa = PBXGroup;
 			children = (
-				42D3A4ED12E815CB00094A67 /* main-GModBackend.cpp */,
-				42D3A4EE12E815CB00094A67 /* Makefile */,
-				42D3A4F412E815CB00094A67 /* SendUDP.cpp */,
-				42D3A4F512E815CB00094A67 /* SendUDP.h */,
+				42B7548C12E980F10023BEDC /* main-UDPBackend.cpp */,
+				42B7548D12E980F10023BEDC /* Makefile */,
+				42B7549412E980F10023BEDC /* SendUDP.cpp */,
+				42B7549512E980F10023BEDC /* SendUDP.h */,
 			);
-			path = GModBackend;
+			path = UDPBackend;
 			sourceTree = "<group>";
 		};
 		C6859E8C029090F304C91782 /* Documentation */ = {
@@ -278,9 +278,9 @@
 				422092B612DFCD6A00DB7914 /* SceneDrawer.cpp in Sources */,
 				422092B712DFCD6A00DB7914 /* Shared.cpp in Sources */,
 				422092BF12DFCD6A00DB7914 /* main-MouseController.cpp in Sources */,
-				42D3A4F612E815CB00094A67 /* main-GModBackend.cpp in Sources */,
-				42D3A4F712E815CB00094A67 /* Makefile in Sources */,
-				42D3A4FC12E815CB00094A67 /* SendUDP.cpp in Sources */,
+				42B7549612E980F10023BEDC /* main-UDPBackend.cpp in Sources */,
+				42B7549712E980F10023BEDC /* Makefile in Sources */,
+				42B7549D12E980F10023BEDC /* SendUDP.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

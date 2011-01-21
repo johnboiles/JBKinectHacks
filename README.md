@@ -14,33 +14,38 @@ To build using the xcode project, you must symlink /usr/include/ni and
 AFAIK there's not an elegant way to get xcode to use the standard /usr/include
 and /usr/lib paths. For my installation I ran the following commands:
 
-sudo ln -s /usr/lib/libOpenNI.dylib /Developer/SDKs/MacOSX10.6.sdk/usr/lib/libOpenNI.dylib
+<pre>sudo ln -s /usr/lib/libOpenNI.dylib /Developer/SDKs/MacOSX10.6.sdk/usr/lib/libOpenNI.dylib</pre>
 
-sudo ln -s /usr/include/ni /Developer/SDKs/MacOSX10.6.sdk/usr/include/ni
+<pre>sudo ln -s /usr/include/ni /Developer/SDKs/MacOSX10.6.sdk/usr/include/ni</pre>
 
 Note that the binaries expect a file named SamplesConfig.xml to be in the present working
 directory when they are run.
 
 To Install OpenNI for Mac
 -------------------------
-# Get OpenNI
-git clone git://github.com/OpenNI/OpenNI.git
+1.   Get OpenNI
 
-# Switch to unstable branch (only unstable supports osx atm)
-git checkout unstable
+<pre>git clone git://github.com/OpenNI/OpenNI.git</pre>
 
-# Follow the installation instructions in the Readme (they're pretty good)
+2.   Switch to unstable branch (only unstable supports osx atm)
 
-# Get the unstable forked version of the PrimeSense/Sensor module working
-git clone git://github.com/ros-pkg-git/Sensor.git
+<pre>git checkout unstable</pre>
 
-# Follow the installation instructions in the Readme (they're also pretty good)
+3.   Follow the installation instructions in the Readme (they're pretty good)
 
-# Get the PrimeSense NITE binaries here:
+4.   Get the unstable forked version of the PrimeSense/Sensor module working
+
+<pre>git clone git://github.com/ros-pkg-git/Sensor.git</pre>
+
+5.   Follow the installation instructions in the Readme (they're also pretty good)
+
+6.   Get the PrimeSense NITE binaries here:
 http://www.openni.org/component/search/?searchword=nite&ordering=&searchphrase=all
 
-# Run the install script included with the NITE binaries
-sudo ./install.sh
+7.   Run the install script included with the NITE binaries
 
-# Use License code
-0KOIk2JeIBYClPWVnMoRKn5cdY4=
+<pre>sudo ./install.sh</pre>
+
+8.   Use License code
+
+<pre>0KOIk2JeIBYClPWVnMoRKn5cdY4=</pre>
