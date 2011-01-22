@@ -19,7 +19,8 @@ function UpdateTrashMonsterPositionsWithSkeleton(skeleton)
 		    newNode:Spawn()
 		    TrashMonster[joint] = newNode
 		end
-		TrashMonster[joint]:GetPhysicsObject():SetPos(point)
+		--TrashMonster[joint]:GetPhysicsObject():SetPos(point)
+        TrashMonster[joint]:SetTargetPosition(point)
     end
 end
 
