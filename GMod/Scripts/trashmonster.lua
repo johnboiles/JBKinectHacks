@@ -29,10 +29,10 @@ function UpdateSkeleton(skeleton)
     for joint, point in pairs(skeleton) do
         skeleton[joint].z = skeleton[joint].z - zoffset
     end
-    skeleton['lf'].z = skeleton['lf'].z + 20
-    skeleton['rf'].z = skeleton['rf'].z + 20
-    skeleton['lh'].z = skeleton['lh'].z - 100
-    skeleton['rh'].z = skeleton['rh'].z - 100
+    skeleton['lf'].z = skeleton['lf'].z + 10
+    skeleton['rf'].z = skeleton['rf'].z + 10
+    --skeleton['lh'].z = skeleton['lh'].z - 100
+    --skeleton['rh'].z = skeleton['rh'].z - 100
     UpdateTrashMonsterPositionsWithSkeleton(skeleton)
 end
  
@@ -54,7 +54,7 @@ connection:SetCallback(function(socket, callType, callId, err, data, peer, peerP
 
         skeleton = {}
         for k, x, y, z in string.gmatch(tostring(data), "([a-z][a-z])x([-.0-9]*)y([-.0-9]*)z([-.0-9]*)") do
-            skeleton[k] = Vector(tonumber(x), tonumber(z), tonumber(y)) * 0.2
+            skeleton[k] = Vector(-tonumber(x), tonumber(z), tonumber(y)) * 0.2
         end
         UpdateSkeleton(skeleton)
 
