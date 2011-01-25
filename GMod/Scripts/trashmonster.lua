@@ -4,13 +4,6 @@ local connection = OOSock(IPPROTO_UDP);
 
 TrashMonster = {}
 
-function CreateTrashMonsterNodesWithNames(names)
-    for index, name in pairs(names) do
-        CreateTrashMonsterNode(name)
-        Msg("Created entity in TrashMonster for node name " .. name .. "\n")
-    end
-end
-
 function UpdateTrashMonsterPositionsWithSkeleton(skeleton)
     for joint, point in pairs(skeleton) do
         Msg("Updating joint " .. joint .. " with x" .. tostring(point.x) .. " y" .. tostring(point.y) .. " z" .. tostring(point.z) .. "\n")

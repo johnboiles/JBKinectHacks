@@ -30,15 +30,25 @@ function FlyAlyx()
 end
 concommand.Add("jb_fly_alex",function(p,c,a) FlyAlyx() end)
 
+function StuffUpEveryBone()
+    local entity = FindTarget("npc_*")
+    MsgN(entity)
+    for i = 1, 128 do --An entity cannot have more than 128 bones
+        entity:SetBonePosition( i, VectorRand() * 32, VectorRand():Angle() )
+    end
+end
+concommand.Add("jb_stuff_bone",function(p,c,a) StuffUpEveryBone() end)
+
+
 function BoneMatrices()
-    local ent = FindTarget("npc_alyx")
-    local boneindex = 7
-    local bonematrix = ent:GetBoneMatrix(boneindex)
-    Msg(ent:GetBoneName(boneindex).."\n")
-    Msg(bonematrix:GetAngle())
-    Msg("\n")
-    bonematrix:Rotate(Angle( 90, 90, 90 ))
-    ent:SetBoneMatrix(boneindex, bonematrix)
+    local ent = FindTarget("prop_*")
+    MsgN(ent)
+    for i=0, ent:GetBoneCount() - 1 do
+      MsgN(ent:GetBoneName(i));
+      local bonematrix = ent:GetBoneMatrix(i)
+      Msg(bonematrix:GetAngle())
+      Msg("\n")
+    end
 end
 concommand.Add("jb_bone_matrices",function(p,c,a) BoneMatrices() end)
 

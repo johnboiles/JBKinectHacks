@@ -12,12 +12,13 @@ function ENT:Initialize()
 	self:SetModel( MODEL )
 	
 	// Don't use the model's physics object, create a perfect sphere
-	self:PhysicsInitSphere( 8, "metal_bouncy" )
-	
+	--self:PhysicsInitSphere( 8, "metal_bouncy" )
+	self:PhysicsInitSphere( 1 )
+
 	// Wake up our physics object so we don't start asleep
 	local phys = self:GetPhysicsObject()
 	if ( phys:IsValid() ) then 
-		phys:SetMass( 100 )
+		phys:SetMass( 150 )
 		phys:EnableGravity( false )
 		phys:Wake() 
 	end
@@ -27,8 +28,6 @@ function ENT:Initialize()
 	
 	self.TargetVelocity = Vector(0,0,0)
 	self.dt.TargetPosition = self:GetPos()
-	self:SetSpeed( 1 )
-		
 end
 
 function ENT:OnRestore()
@@ -72,11 +71,8 @@ end
 ---------------------------------------------------------*/
 function ENT:PhysicsSimulate( phys, deltatime )
 
-	//if ( self.TargetVelocity != Vector(0, 0, 0) ) then
-	//	self.dt.TargetPosition = self.dt.TargetPosition + (self.TargetVelocity * deltatime * self:GetSpeed())
-		--Msg(string.format( "self.dt.TargetPosition is: (%.2f, %.2f, %.2f) deltatime was %.2f\n", self.dt.TargetPosition.x, self.dt.TargetPosition.y, self.dt.TargetPosition.z, deltatime))
-		self:GetPhysicsObject():Wake()
-	//end
+	--Is this necessary?
+	self:GetPhysicsObject():Wake()
 	
 	phys:Wake()
 	
