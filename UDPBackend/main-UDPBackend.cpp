@@ -51,8 +51,8 @@ XnBool g_bPrintState = TRUE;
 	#include <GL/glut.h>
 #endif
 
-#define GL_WIN_SIZE_X 720
-#define GL_WIN_SIZE_Y 480
+#define GL_WIN_SIZE_X 360
+#define GL_WIN_SIZE_Y 240
 
 XnBool g_bPause = false;
 XnBool g_bRecord = false;
@@ -224,7 +224,7 @@ void SendUDPSkeletalData(XnUserID player) {
           rightFoot.position.X, rightFoot.position.Y, rightFoot.position.Z, 
           head.position.X, head.position.Y, head.position.Z);
 */
-  printf("sending data: %s\n", packet);
+	//printf("sending data: %s\n", packet);
 	SUDP_SendMsg(packet, strlen(packet));
 }
 
