@@ -18,7 +18,10 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+# Change this line to your steam username, or build using (at least on osx)
+# make install STEAM_USERNAME=anotheruser
 STEAM_USERNAME = jaboiles
+
 INSTALL_PATH = ~/Library/Application\ Support/Steam/SteamApps/$(STEAM_USERNAME)/garrysmod/garrysmod/lua
 
 install:
