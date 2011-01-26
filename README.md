@@ -56,9 +56,11 @@ To Run the Garry's Mod Example
 
 4.   Build and run the UDPBackend example (sends skeletal data over UDP)
      <pre>cd ../UDPBackend
-make install
+make
 cd ..
 ./Bin/Release/UDPBackend</pre>
+     Note that you must execute UDPBackend with SamplesConfig.xml in the present working
+     directory. So from the base directory of this project, use ./Bin/Release/UDPBackend
 
 5.   Open Garry's Mod and start a new game (multiplayer or singleplayer)
 
