@@ -77,6 +77,8 @@ int g_time;
 zmq::context_t context(1);
 zmq::socket_t socket(context, ZMQ_PUB);
 
+void SendEvent(const string& etype, const string& edata);
+
 
 //---------------------------------------------------------------------------
 // Code
@@ -93,6 +95,10 @@ void CleanupExit()
 void XN_CALLBACK_TYPE User_NewUser(xn::UserGenerator& generator, XnUserID nId, void* pCookie)
 {
 	printf("New User %d\n", nId);
+	stringstream ss;
+	ss << "\"id\":"  << nId;
+	SendEvent("UserDetected", ss.str());
+
 	// New user found
 	if (g_bNeedPose)
 	{
@@ -107,6 +113,10 @@ void XN_CALLBACK_TYPE User_NewUser(xn::UserGenerator& generator, XnUserID nId, v
 void XN_CALLBACK_TYPE User_LostUser(xn::UserGenerator& generator, XnUserID nId, void* pCookie)
 {
 	printf("Lost user %d\n", nId);
+
+	stringstream ss;
+	ss << "\"id\":"  << nId;
+	SendEvent("UserLost", ss.str());
 }
 // Callback: Detected a pose
 void XN_CALLBACK_TYPE UserPose_PoseDetected(xn::PoseDetectionCapability& capability, const XnChar* strPose, XnUserID nId, void* pCookie)
@@ -114,11 +124,19 @@ void XN_CALLBACK_TYPE UserPose_PoseDetected(xn::PoseDetectionCapability& capabil
 	printf("Pose %s detected for user %d\n", strPose, nId);
 	g_UserGenerator.GetPoseDetectionCap().StopPoseDetection(nId);
 	g_UserGenerator.GetSkeletonCap().RequestCalibration(nId, TRUE);
+
+	stringstream ss;
+	ss << "\"id\":"  << nId;
+	SendEvent("UserPoseDetected", ss.str());
 }
 // Callback: Started calibration
 void XN_CALLBACK_TYPE UserCalibration_CalibrationStart(xn::SkeletonCapability& capability, XnUserID nId, void* pCookie)
 {
 	printf("Calibration started for user %d\n", nId);
+
+	stringstream ss;
+	ss << "\"id\":"  << nId;
+	SendEvent("UserCalibrationStart", ss.str());
 }
 // Callback: Finished calibration
 void XN_CALLBACK_TYPE UserCalibration_CalibrationEnd(xn::SkeletonCapability& capability, XnUserID nId, XnBool bSuccess, void* pCookie)
@@ -128,11 +146,18 @@ void XN_CALLBACK_TYPE UserCalibration_CalibrationEnd(xn::SkeletonCapability& cap
 		// Calibration succeeded
 		printf("Calibration complete, start tracking user %d\n", nId);
 		g_UserGenerator.GetSkeletonCap().StartTracking(nId);
+		stringstream ss;
+		ss << "\"id\":"  << nId;
+		SendEvent("UserCalibrationComplete", ss.str());
 	}
 	else
 	{
 		// Calibration failed
 		printf("Calibration failed for user %d\n", nId);
+		stringstream ss;
+		ss << "\"id\":"  << nId;
+		SendEvent("UserCalibrationFailed", ss.str());
+
 		if (g_bNeedPose)
 		{
 			g_UserGenerator.GetPoseDetectionCap().StartPoseDetection(g_strPose, nId);

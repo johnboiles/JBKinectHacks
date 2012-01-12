@@ -8,4 +8,6 @@ build
 Bin
 *.lo
 *.o
-
+JBKinectHacks.xcodeproj/project.xcworkspace/xcuserdata
+JBKinectHacks.xcodeproj/xcuserdata
+ZmqPub/Release
